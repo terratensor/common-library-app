@@ -51,9 +51,6 @@ services:
     volumes:
       - manticore:/var/lib/manticore
       - manticore:/var/log/manticore
-#      - ./docker/manticore/wordforms.txt:/var/lib/manticore/wordforms.txt
-#      - ./docker/manticore/alternateforms.txt:/var/lib/manticore/alternateforms.txt
-#      - ./docker/manticore/exceptions.txt:/var/lib/manticore/exceptions.txt
       - ./docker/manticore/manticore.conf:/etc/manticoresearch/manticore.conf
 
   postgres:
@@ -87,7 +84,11 @@ secrets:
 
 volumes:
   postgres:
+    driver_opts:
+      device: /dev/vdb
   manticore:
+    driver_opts:
+      device: /dev/vdb
 
 networks:
   common-library-net:

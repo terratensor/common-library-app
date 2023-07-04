@@ -44,45 +44,45 @@ build: build-frontend build-manticore
 build-frontend:
 	DOCKER_BUILDKIT=1 docker --log-level=debug build --pull --build-arg BUILDKIT_INLINE_CACHE=1 \
 		--target builder \
-		--cache-from ${REGISTRY}/kob-library-app:cache-builderr \
-		--tag ${REGISTRY}/kob-library-app:cache-builder \
+		--cache-from ${REGISTRY}/common-library-app:cache-builderr \
+		--tag ${REGISTRY}/common-library-app:cache-builder \
 		--file app/docker/production/Dockerfile app
 
 	DOCKER_BUILDKIT=1 docker --log-level=debug build --pull --build-arg BUILDKIT_INLINE_CACHE=1 \
-		--cache-from ${REGISTRY}/kob-library-app:cache-builder \
-		--cache-from ${REGISTRY}/kob-library-app:cache \
-		--tag ${REGISTRY}/kob-library-app:cache \
-		--tag ${REGISTRY}/kob-library-app:${IMAGE_TAG} \
+		--cache-from ${REGISTRY}/common-library-app:cache-builder \
+		--cache-from ${REGISTRY}/common-library-app:cache \
+		--tag ${REGISTRY}/common-library-app:cache \
+		--tag ${REGISTRY}/common-library-app:${IMAGE_TAG} \
         --file app/docker/production/Dockerfile app
 
 build-manticore:
 	DOCKER_BUILDKIT=1 docker --log-level=debug build --pull --build-arg BUILDKIT_INLINE_CACHE=1 \
-        --cache-from ${REGISTRY}/kob-library-manticore:cache \
-        --tag ${REGISTRY}/kob-library-manticore:cache \
-        --tag ${REGISTRY}/kob-library-manticore:${IMAGE_TAG} \
+        --cache-from ${REGISTRY}/common-library-manticore:cache \
+        --tag ${REGISTRY}/common-library-manticore:cache \
+        --tag ${REGISTRY}/common-library-manticore:${IMAGE_TAG} \
         --file docker/Dockerfile app
 
 push-build-cache: push-build-cache-frontend push-build-cache-manticore
 
 push-build-cache-frontend:
-	docker push ${REGISTRY}/kob-library-app:cache-builder
-	docker push ${REGISTRY}/kob-library-app:cache
+	docker push ${REGISTRY}/common-library-app:cache-builder
+	docker push ${REGISTRY}/common-library-app:cache
 
 push-build-cache-manticore:
-	docker push ${REGISTRY}/kob-library-manticore:cache
+	docker push ${REGISTRY}/common-library-manticore:cache
 
 push:
-	docker push ${REGISTRY}/kob-library-app:${IMAGE_TAG}
-	docker push ${REGISTRY}/kob-library-manticore:${IMAGE_TAG}
+	docker push ${REGISTRY}/common-library-app:${IMAGE_TAG}
+	docker push ${REGISTRY}/common-library-manticore:${IMAGE_TAG}
 
 deploy:
 	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'docker network create --driver=overlay traefik-public || true'
-	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'rm -rf kob_${BUILD_NUMBER} && mkdir kob_${BUILD_NUMBER}'
+	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'rm -rf common_${BUILD_NUMBER} && mkdir common_${BUILD_NUMBER}'
 
 	envsubst < docker-compose-production.yml > docker-compose-production-env.yml
-	scp -o StrictHostKeyChecking=no -P ${PORT} docker-compose-production-env.yml deploy@${HOST}:kob_${BUILD_NUMBER}/docker-compose.yml
+	scp -o StrictHostKeyChecking=no -P ${PORT} docker-compose-production-env.yml deploy@${HOST}:common_${BUILD_NUMBER}/docker-compose.yml
 	rm -f docker-compose-production-env.yml
 
-	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'mkdir kob_${BUILD_NUMBER}/secrets'
-	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'cp .secrets_kob_library/* kob_${BUILD_NUMBER}/secrets'
-	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'cd kob_${BUILD_NUMBER} && docker stack deploy --compose-file docker-compose.yml kob-library --with-registry-auth --prune'
+	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'mkdir common_${BUILD_NUMBER}/secrets'
+	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'cp .secrets_common_library/* common_${BUILD_NUMBER}/secrets'
+	ssh -o StrictHostKeyChecking=no deploy@${HOST} -p ${PORT} 'cd common_${BUILD_NUMBER} && docker stack deploy --compose-file docker-compose.yml common-library --with-registry-auth --prune'
