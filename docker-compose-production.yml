@@ -1,0 +1,98 @@
+version: "3.9"
+services:
+
+  php:
+    image: ${REGISTRY}/kob-library-app:${IMAGE_TAG}
+    networks:
+      - traefik-public
+      - kob-library-net
+    environment:
+      APP_ENV: prod
+      COMPOSER_ALLOW_SUPERUSER: 1
+      FRONTEND_URL: https://kob.svodd.ru
+      GH_REPO_URL: https://github.com/terratensor/kob-library-app
+      POSTGRES_HOST: ${APP_POSTGRES_HOST}
+      POSTGRES_USER: ${APP_POSTGRES_USER}
+      POSTGRES_PASSWORD_FILE: /run/secrets/app_db_password
+      POSTGRES_DB: ${APP_POSTGRES_DB}
+      PAGE_SIZE: 50
+      URL_SHORTENER_HOST: http://url-shortener:8000
+      URL_SHORTENER_URL: https://svodd.ru
+      COOKIE_DOMAIN: svodd.ru
+      COOKIE_VALIDATION_KEY_FILE: /run/secrets/app_cookie_validation_key
+    secrets:
+      - app_db_password
+      - app_cookie_validation_key
+    deploy:
+      placement:
+        constraints: [ node.role == manager ]
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.http.routers.kob-library-app.rule=Host(`kob.svodd.ru`)
+        - traefik.http.services.kob-library-app.loadBalancer.server.port=80
+        - traefik.http.routers.kob-library-app.middlewares=frontend-redirect,secure-headers
+        - traefik.http.routers.kob-library-app.entryPoints=https
+        - traefik.http.routers.kob-library-app.tls=true
+        - traefik.http.routers.kob-library-app.tls.certResolver=letsEncrypt
+      mode: replicated
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 15s
+
+  manticore:
+    image: ${REGISTRY}/kob-library-manticore:${IMAGE_TAG}
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65535
+        hard: 65535
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - manticore:/var/lib/manticore
+      - manticore:/var/log/manticore
+    networks:
+      - kob-library-net
+    deploy:
+      placement:
+        constraints: [ node.role == manager ]
+      endpoint_mode: dnsrr
+
+  postgres:
+    image: postgres:15.1-alpine
+    environment:
+      APP_ENV: dev
+      POSTGRES_HOST: ${APP_POSTGRES_HOST}
+      POSTGRES_USER: ${APP_POSTGRES_USER}
+      POSTGRES_DB: ${APP_POSTGRES_DB}
+      POSTGRES_PASSWORD_FILE: /run/secrets/app_db_password
+    secrets:
+      - app_db_password
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - kob-library-net
+    deploy:
+      placement:
+        constraints: [ node.role == manager ]
+      endpoint_mode: dnsrr
+
+volumes:
+  postgres:
+  manticore:
+
+secrets:
+  app_db_password:
+    file: ${APP_DB_PASSWORD_FILE}
+  app_cookie_validation_key:
+    file: ${APP_COOKIE_VALIDATION_KEY_FILE}
+
+networks:
+  traefik-public:
+    external: true
+  kob-library-net:

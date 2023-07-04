@@ -1,0 +1,93 @@
+version: '3.9'
+services:
+  php:
+    image: yiisoftware/yii2-php:8.1-apache
+    networks:
+      - common-library-net
+    environment:
+      APP_ENV: dev
+      COMPOSER_ALLOW_SUPERUSER: 1
+      FRONTEND_URL: 'http://localhost:8020'
+      GH_REPO_URL: 'https://github.com/terratensor/common-library-app'
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD_FILE: /run/secrets/app_db_password
+      POSTGRES_DB: common-library
+      PAGE_SIZE: 50
+      URL_SHORTENER_HOST: url-shortener:8000
+      URL_SHORTENER_URL: http://localhost
+      COOKIE_DOMAIN: localhost
+      COOKIE_VALIDATION_KEY_FILE: /run/secrets/app_cookie_validation_key
+      MANTICORE_DB_NAME_COMMON: common_library
+    secrets:
+      - app_db_password
+      - app_cookie_validation_key
+    volumes:
+      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+      - ./app:/app:delegated
+    ports:
+      - '8020:80'
+
+  manticore:
+    container_name: common-library-manticore
+    image: manticoresearch/manticore
+    ports:
+      - "127.0.0.1:9306:9306"
+      - "127.0.0.1:9308:9308"
+      - "127.0.0.1:9312:9312"
+
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65535
+        hard: 65535
+      memlock:
+        soft: -1
+        hard: -1
+    networks:
+      - common-library-net
+    volumes:
+      - manticore:/var/lib/manticore
+      - manticore:/var/log/manticore
+#      - ./docker/manticore/wordforms.txt:/var/lib/manticore/wordforms.txt
+#      - ./docker/manticore/alternateforms.txt:/var/lib/manticore/alternateforms.txt
+#      - ./docker/manticore/exceptions.txt:/var/lib/manticore/exceptions.txt
+      - ./docker/manticore/manticore.conf:/etc/manticoresearch/manticore.conf
+
+  postgres:
+    container_name: common-library-postgres
+    image: postgres:15.1-alpine
+    ports:
+      - "54322:5432"
+    environment:
+      APP_ENV: dev
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: app
+      POSTGRES_DB: common-library
+      POSTGRES_PASSWORD_FILE: /run/secrets/app_db_password
+    secrets:
+      - app_db_password
+    networks:
+      - common-library-net
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+#  kob-library-parser:
+#    image: ghcr.io/terratensor/kob-library-parser:0.1.0
+#    environment:
+#      PG_DSN: "host=postgres user=app password=secret dbname=vpsssr-library port=5432 sslmode=disable TimeZone=Europe/Moscow"
+
+secrets:
+  app_db_password:
+    file: ./docker/development/secrets/app_db_password
+  app_cookie_validation_key:
+    file: ./docker/development/secrets/app_cookie_validation_key
+
+volumes:
+  postgres:
+  manticore:
+
+networks:
+  common-library-net:
