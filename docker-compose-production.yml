@@ -2,15 +2,15 @@ version: "3.9"
 services:
 
   php:
-    image: ${REGISTRY}/kob-library-app:${IMAGE_TAG}
+    image: ${REGISTRY}/common-library-app:${IMAGE_TAG}
     networks:
       - traefik-public
-      - kob-library-net
+      - common-library-net
     environment:
       APP_ENV: prod
       COMPOSER_ALLOW_SUPERUSER: 1
-      FRONTEND_URL: https://kob.svodd.ru
-      GH_REPO_URL: https://github.com/terratensor/kob-library-app
+      FRONTEND_URL: https://lib.svodd.ru
+      GH_REPO_URL: https://github.com/terratensor/common-library-app
       POSTGRES_HOST: ${APP_POSTGRES_HOST}
       POSTGRES_USER: ${APP_POSTGRES_USER}
       POSTGRES_PASSWORD_FILE: /run/secrets/app_db_password
@@ -29,12 +29,12 @@ services:
       labels:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
-        - traefik.http.routers.kob-library-app.rule=Host(`kob.svodd.ru`)
-        - traefik.http.services.kob-library-app.loadBalancer.server.port=80
-        - traefik.http.routers.kob-library-app.middlewares=frontend-redirect,secure-headers
-        - traefik.http.routers.kob-library-app.entryPoints=https
-        - traefik.http.routers.kob-library-app.tls=true
-        - traefik.http.routers.kob-library-app.tls.certResolver=letsEncrypt
+        - traefik.http.routers.common-library-app.rule=Host(`lib.svodd.ru`)
+        - traefik.http.services.common-library-app.loadBalancer.server.port=80
+        - traefik.http.routers.common-library-app.middlewares=frontend-redirect,secure-headers
+        - traefik.http.routers.common-library-app.entryPoints=https
+        - traefik.http.routers.common-library-app.tls=true
+        - traefik.http.routers.common-library-app.tls.certResolver=letsEncrypt
       mode: replicated
       replicas: 2
       update_config:
@@ -42,7 +42,7 @@ services:
         delay: 15s
 
   manticore:
-    image: ${REGISTRY}/kob-library-manticore:${IMAGE_TAG}
+    image: ${REGISTRY}/common-library-manticore:${IMAGE_TAG}
     cap_add:
       - IPC_LOCK
     ulimits:
@@ -57,7 +57,7 @@ services:
       - manticore:/var/lib/manticore
       - manticore:/var/log/manticore
     networks:
-      - kob-library-net
+      - common-library-net
     deploy:
       placement:
         constraints: [ node.role == manager ]
@@ -76,7 +76,7 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
     networks:
-      - kob-library-net
+      - common-library-net
     deploy:
       placement:
         constraints: [ node.role == manager ]
@@ -84,6 +84,8 @@ services:
 
 volumes:
   postgres:
+    driver_opts:
+      device: /dev/sda3
   manticore:
 
 secrets:
@@ -95,4 +97,4 @@ secrets:
 networks:
   traefik-public:
     external: true
-  kob-library-net:
+  common-library-net:
