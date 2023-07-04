@@ -8,14 +8,14 @@ use yii\base\Model;
 
 class Paragraph extends Model
 {
-    public $uuid;
-    public $book_id;
-    public $book_name;
-    public $text;
-    public $position;
-    public $length;
-    public $highlight;
-    private $id;
+    public string $uuid;
+    public string $book_id;
+    public string $book_name;
+    public string $text;
+    public string $position;
+    public string $length;
+    public array $highlight;
+    private int $id;
 
     public static function create(
         string $uuid,
@@ -24,7 +24,7 @@ class Paragraph extends Model
         string $text,
         string $position,
         string $length,
-        ?string $highlight,
+        array $highlight,
     ): self {
         $paragraph = new static();
 
@@ -44,7 +44,8 @@ class Paragraph extends Model
         $this->id = $id;
     }
 
-    public function getId() {
+    public function getId(): int
+    {
         return $this->id;
     }
 }

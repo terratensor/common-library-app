@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 
+use src\forms\QuoteForm;
 use src\forms\SearchForm;
 use src\Search\Http\Action\V1\SearchSettings\ToggleAction;
 use src\services\EmptySearchRequestExceptions;
@@ -10,7 +11,9 @@ use src\services\ManticoreService;
 use src\services\NeighboringService;
 use src\UrlShortener\Http\Action\V1\UrlShortener\ShortLinkAction;
 use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\widgets\ActiveForm;
 
 class SiteController extends Controller
@@ -29,6 +32,19 @@ class SiteController extends Controller
         parent::__construct($id, $module, $config);
         $this->service = $service;
         $this->neighboringService = $neighboringService;
+    }
+
+    public function behaviors(): array
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'quote' => ['POST'],
+                    'index' => ['GET'],
+                ],
+            ],
+        ];
     }
 
     public function actions(): array
@@ -75,9 +91,33 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionNeighboring($id, $num): \yii\web\Response
+    /**
+     * @throws NotFoundHttpException
+     */
+    public function actionQuote(): string
     {
-        $form = $this->neighboringService->handle($id, $num);
-        return $this->redirect(['site/index', 'search' => $form->toArray()]);
+        $this->layout = 'print';
+        $form = new QuoteForm();
+        $errorQueryMessage = 'The requested page does not exist.';
+
+        try {
+            if ($form->load(Yii::$app->request->post(), '') && $form->validate()) {
+
+                $quoteResults = $this->neighboringService->handle($form);
+                $results = $this->service->search($quoteResults->searchForm);
+
+                return $this->render('quote', [
+                    'results' => $results,
+                    'bookName' => $quoteResults->bookName,
+                ]);
+            }
+        } catch (\DomainException $e) {
+            Yii::$app->errorHandler->logException($e);
+            Yii::$app->session->setFlash('error', $e->getMessage());
+        } catch (EmptySearchRequestExceptions $e) {
+            $errorQueryMessage = $e->getMessage();
+        }
+
+        throw new NotFoundHttpException($errorQueryMessage);
     }
 }

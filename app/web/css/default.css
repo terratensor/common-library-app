@@ -359,6 +359,10 @@ input:focus:-ms-input-placeholder {
     padding-bottom: 1rem;
 }
 
+.quote-results .paragraph {
+    padding-bottom: 0;
+}
+
 .paragraph-header {
     padding-bottom: 1rem;
 }
@@ -434,6 +438,10 @@ input:focus:-ms-input-placeholder {
         padding-bottom: 2rem !important;
     }
 
+    .quote-results .paragraph {
+        padding-bottom: 0.5rem !important;
+    }
+
     .paragraph-header {
         padding-bottom: 2rem !important;
     }
@@ -489,4 +497,8 @@ input:focus:-ms-input-placeholder {
     content: "";
     height: 250px;
     margin: -250px 0 0;
+}
+
+.container-fluid.quote-results {
+    padding: 15px;
 }
