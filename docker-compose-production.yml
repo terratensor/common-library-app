@@ -20,6 +20,7 @@ services:
       URL_SHORTENER_URL: https://svodd.ru
       COOKIE_DOMAIN: svodd.ru
       COOKIE_VALIDATION_KEY_FILE: /run/secrets/app_cookie_validation_key
+      MANTICORE_DB_NAME_COMMON: common_library
     secrets:
       - app_db_password
       - app_cookie_validation_key
@@ -84,9 +85,17 @@ services:
 
 volumes:
   postgres:
+    driver: local
     driver_opts:
-      device: /dev/sda3
+      type: none
+      device: /mnt/common/common-library_postgres
+      o: bind
   manticore:
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/common/common-library_manticore
+      o: bind
 
 secrets:
   app_db_password:
