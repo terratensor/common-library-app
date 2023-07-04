@@ -8,7 +8,7 @@ use yii\base\Widget;
 
 class ScrollWidget extends Widget
 {
-    public int $data_entity_id;
+    public string $data_entity_id;
     public bool $showTop = true;
     public bool $showLast = true;
 
