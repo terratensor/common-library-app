@@ -8,6 +8,7 @@ use yii\base\Model;
 
 class Paragraph extends Model
 {
+    public $uuid;
     public $book_id;
     public $book_name;
     public $text;
@@ -17,6 +18,7 @@ class Paragraph extends Model
     private $id;
 
     public static function create(
+        string $uuid,
         string $book_id,
         string $book_name,
         string $text,
@@ -26,6 +28,7 @@ class Paragraph extends Model
     ): self {
         $paragraph = new static();
 
+        $paragraph->uuid = $uuid;
         $paragraph->book_id = $book_id;
         $paragraph->book_name = $book_name;
         $paragraph->text = $text;
