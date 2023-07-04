@@ -7,6 +7,7 @@ namespace src\repositories;
 use Manticoresearch\Client;
 use Manticoresearch\Index;
 use Manticoresearch\Query\BoolQuery;
+use Manticoresearch\Query\Equals;
 use Manticoresearch\Query\In;
 use Manticoresearch\Query\MatchPhrase;
 use Manticoresearch\Query\MatchQuery;
@@ -14,6 +15,7 @@ use Manticoresearch\Query\QueryString;
 use Manticoresearch\Search;
 use src\forms\SearchForm;
 use src\helpers\SearchHelper;
+use src\models\Paragraph;
 
 class ParagraphRepository
 {
@@ -282,5 +284,27 @@ class ParagraphRepository
     public function setIndexName(string $indexName): void
     {
         $this->indexName = $indexName;
+    }
+
+    /**
+     * Возвращает paragraph по uuid
+     * @param string $uuid
+     * @return Paragraph
+     */
+    public function findByParagraphUuid(string $uuid): Paragraph
+    {
+
+        $this->search->reset();
+
+        $query = new BoolQuery();
+
+        $query->must(new Equals('uuid', $uuid));
+
+        $search = $this->index->search($query);
+
+        $current = $search->get()->current();
+        $paragraph = new Paragraph($current->getData());
+        $paragraph->setId((int)$current->getId());
+        return $paragraph;
     }
 }

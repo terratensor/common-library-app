@@ -4,18 +4,28 @@ declare(strict_types=1);
 
 namespace src\services;
 
+use src\forms\QuoteForm;
 use src\forms\SearchForm;
+use src\models\QuoteResultPdo;
+use src\repositories\ParagraphRepository;
 
 class NeighboringService
 {
-    public function handle($paragraphID, $num): SearchForm
-    {
+    private ParagraphRepository $paragraphRepository;
 
+    public function __construct(ParagraphRepository $paragraphRepository)
+    {
+        $this->paragraphRepository = $paragraphRepository;
+    }
+
+    public function handle(QuoteForm $quoteForm): QuoteResultPdo
+    {
+        $paragraph = $this->paragraphRepository->findByParagraphUuid($quoteForm->uuid);
         $form = new SearchForm();
         $form->matching = 'in';
-        $form->dictionary = false;
-        $form->query = implode(',', $this->getList((int)$paragraphID, (int)$num));
-        return $form;
+        $form->query = implode(',', $this->getList((int)$paragraph->getId(), 3));
+
+        return new QuoteResultPdo($paragraph->book_name, $form);
     }
 
     public function getList(int $paragraphID, int $num): array

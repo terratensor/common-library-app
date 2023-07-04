@@ -7,8 +7,6 @@
  * @var string $errorQueryMessage
  */
 
-use app\widgets\FollowParagraph;
-use app\widgets\NeighboringParagraphs;
 use app\widgets\ScrollWidget;
 use app\widgets\SearchResultsSummary;
 use src\forms\SearchForm;
@@ -23,6 +21,13 @@ $this->title = Yii::$app->name;
 $this->params['breadcrumbs'][] = 'Поиск по книгам';
 
 
+/** Quote form block  */
+
+echo Html::beginForm(['/site/quote'], 'post', ['name' => 'QuoteForm',  'target' => "print_blank" ]);
+echo Html::hiddenInput('uuid', '', ['id' => 'quote-form-uuid']);
+echo Html::endForm();
+
+/** Search settings form block */
 echo Html::beginForm(['/site/search-settings'], 'post', ['name' => 'searchSettingsForm', 'class' => 'd-flex']);
 echo Html::hiddenInput('value', 'toggle');
 echo Html::endForm();
@@ -71,13 +76,6 @@ $inputTemplate = '<div class="input-group mb-2">
                 ->radioList($model->getMatching(), ['class' => 'form-check-inline'])
                 ->label(false); ?>
 
-          <div class="row">
-            <div class="col-md-6 d-flex align-items-center">
-                <?= $form->field($model, 'dictionary', ['options' => ['class' => 'pb-2']])
-                    ->checkbox()
-                    ->label('Словарь концептуальных терминов (тестирование)'); ?>
-            </div>
-          </div>
         </div>
           <?php ActiveForm::end(); ?>
       </div>
@@ -117,14 +115,17 @@ $inputTemplate = '<div class="input-group mb-2">
               <div class="card pt-3">
                 <div class="card-body">
                     <?php foreach ($paragraphs as $paragraph): ?>
-                      <div class="px-xl-5 px-lg-5 px-md-5 px-sm-3 paragraph" data-entity-id="<?= $paragraph->getId(); ?>">
+                      <div class="px-xl-5 px-lg-5 px-md-5 px-sm-3 paragraph" data-entity-id="<?= $paragraph->uuid; ?>">
                         <div class="paragraph-header">
                           <div class="d-flex justify-content-between">
                             <div>
 
                             </div>
                             <div class="paragraph-context">
-                                <?= Html::a("#" . $paragraph->getId(), ['site/neighboring', 'id' => $paragraph->getId(), 'num' => 3]); ?>
+                                <?= Html::button('контекст', [
+                                        'class' => 'btn btn-link btn-context paragraph-context',
+                                        'data-uuid' => $paragraph->uuid,
+                                ]); ?>
                             </div>
                           </div>
                         </div>
@@ -167,7 +168,7 @@ $inputTemplate = '<div class="input-group mb-2">
         </div>
       </div>
     </div>
-      <?= ScrollWidget::widget(['data_entity_id' => isset($paragraph) ? $paragraph->getId() : 0]); ?>
+      <?= ScrollWidget::widget(['data_entity_id' => isset($paragraph) ? $paragraph->uuid : 0]); ?>
       <?php else: ?>
         <div class="card welcome-card">
           <div class="card-body">
@@ -213,6 +214,19 @@ function toggleSearchSettings(event) {
   xhr.open("POST", "/site/search-settings");
   xhr.send(formData);
 }
+// Обработчик ссылок контекста
+const contextButtons = document.querySelectorAll('button.btn-context')
+contextButtons.forEach(function (element) {
+  element.addEventListener('click', btnContextHandler, false)
+})
+
+function btnContextHandler(event) {
+  const quoteForm = document.forms["QuoteForm"]
+  const uuid = document.getElementById("quote-form-uuid")
+  uuid.value = event.target.dataset.uuid
+  quoteForm.submit();
+}
+
 
 $('input[type=radio]').on('change', function() {
     $(this).closest("form").submit();

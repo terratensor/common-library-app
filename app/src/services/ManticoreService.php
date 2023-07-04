@@ -27,10 +27,6 @@ class ManticoreService
     {
         $queryString = $form->query;
 
-        if ($form->dictionary) {
-            $indexName = \Yii::$app->params['indexes']['concept'];
-        }
-
         try {
             $comments = match ($form->matching) {
                 'query_string' => $this->paragraphRepository
