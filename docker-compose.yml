@@ -84,11 +84,7 @@ secrets:
 
 volumes:
   postgres:
-    driver_opts:
-      device: /dev/vdb
   manticore:
-    driver_opts:
-      device: /dev/vdb
 
 networks:
   common-library-net:
