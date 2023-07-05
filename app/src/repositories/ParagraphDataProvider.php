@@ -91,9 +91,13 @@ class ParagraphDataProvider extends BaseDataProvider
     protected function prepareTotalCount()
     {
         $count = $this->query->get()->getTotal();
-        if ($count > 1000) {
-            $this->query->maxMatches($count);
+        /**
+         * https://manual.manticoresearch.com/Searching/Options#max_matches
+         */
+        if ($count > 10000) {
+            $count = 10000;
         }
+        $this->query->maxMatches($count);
         return $count;
     }
 }
