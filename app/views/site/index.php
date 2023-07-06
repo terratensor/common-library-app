@@ -170,10 +170,10 @@ $inputTemplate = '<div class="input-group mb-2">
     </div>
       <?= ScrollWidget::widget(['data_entity_id' => isset($paragraph) ? $paragraph->uuid : 0]); ?>
       <?php else: ?>
-        <div class="card welcome-card">
-          <div class="card-body">
-          </div>
-        </div>
+<!--        <div class="card welcome-card">-->
+<!--          <div class="card-body">-->
+<!--          </div>-->
+<!--        </div>-->
       <?php endif; ?>
   </div>
 <?php $js = <<<JS
