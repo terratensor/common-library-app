@@ -44,6 +44,8 @@ services:
 
   manticore:
     image: ${REGISTRY}/common-library-manticore:${IMAGE_TAG}
+    environment:
+      - EXTRA=1
     cap_add:
       - IPC_LOCK
     ulimits:
