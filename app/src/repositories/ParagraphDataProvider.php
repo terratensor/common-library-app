@@ -97,7 +97,7 @@ class ParagraphDataProvider extends BaseDataProvider
          * Если ограничение max_matches установлено, то устанавливаем счетчик кол-во совпадений равный параметру max_matches
          * Иначе устанавливаем значение запроса max_matches равное кол-во существующих результатов, т.е. выдача без ограничения
          */
-        if ($max_matches !== 0) {
+        if ($max_matches !== 0 && $count > $max_matches) {
             $count = $max_matches;
         }
         $this->query->maxMatches($count);
