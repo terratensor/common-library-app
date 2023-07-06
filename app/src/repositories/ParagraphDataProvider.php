@@ -59,7 +59,7 @@ class ParagraphDataProvider extends BaseDataProvider
                 try {
                     $model->highlight = $data->current()->getHighlight();
                 } catch (\Exception $e) {
-                    $model->highlight = null;
+                    $model->highlight = [];
                 }
                 $models[] = $model;
                 $data->next();
