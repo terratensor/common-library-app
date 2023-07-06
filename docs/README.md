@@ -58,6 +58,8 @@ ext2/ext3/ext4:
 resize2fs /dev/vdb1
 
 -----------------------------
+
+`/etc/fstab`
 ```
 LABEL=cloudimg-rootfs / ext4 defaults 0 1
 /swap-2048M none swap sw 0 0

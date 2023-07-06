@@ -90,12 +90,15 @@ class ParagraphDataProvider extends BaseDataProvider
 
     protected function prepareTotalCount()
     {
+        $max_matches = (int)\Yii::$app->params['manticore']['max_matches'];
         $count = $this->query->get()->getTotal();
         /**
          * https://manual.manticoresearch.com/Searching/Options#max_matches
+         * Если ограничение max_matches установлено, то устанавливаем счетчик кол-во совпадений равный параметру max_matches
+         * Иначе устанавливаем значение запроса max_matches равное кол-во существующих результатов, т.е. выдача без ограничения
          */
-        if ($count > 10000) {
-            $count = 10000;
+        if ($max_matches !== 0) {
+            $count = $max_matches;
         }
         $this->query->maxMatches($count);
         return $count;
