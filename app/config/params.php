@@ -20,5 +20,6 @@ return [
     'indexes' => [
         'common' =>  getenv('MANTICORE_DB_NAME_COMMON'),
         'concept' => 'vpsssr_library_concept',
-    ]
+    ],
+    'bsVersion' => '5.x'
 ];
