@@ -19,8 +19,7 @@
         "yiisoft/yii2-symfonymailer": "~2.0.3",
         "manticoresoftware/manticoresearch-php": "^3.0",
         "ext-iconv": "*",
-        "yiisoft/yii2-httpclient": "^2.0",
-        "kartik-v/yii2-widget-typeahead": "dev-master"
+        "yiisoft/yii2-httpclient": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
