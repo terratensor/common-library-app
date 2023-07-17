@@ -43,7 +43,7 @@ services:
         parallelism: 1
         delay: 15s
 
-  manticore:
+  lib-manticore:
     image: ${REGISTRY}/common-library-manticore:${IMAGE_TAG}
     environment:
       - EXTRA=1
