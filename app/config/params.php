@@ -10,7 +10,7 @@ return [
     'urlShortenerHost' => getenv('URL_SHORTENER_HOST'), // Хост в сети интернет, в локальной сети docker - это наименования сервиса
     'urlShortenerUrl' => getenv('URL_SHORTENER_URL'), // Хост в сети интернет, в локальной сети docker - это наименования сервиса
     'manticore' => [
-        'host' => 'manticore',
+        'host' => 'lib-manticore',
         'port' => 9308,
         'max_matches' => getenv('MANTICORE_MAX_MATCHES') ?? 0, // Maximum amount of matches that the server keeps in RAM for each table and can return to the client. Default is unlimited.
     ],

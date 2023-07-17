@@ -29,7 +29,7 @@ services:
     ports:
       - '8020:80'
 
-  manticore:
+  lib-manticore:
     container_name: common-library-manticore
     image: manticoresearch/manticore
     environment:
