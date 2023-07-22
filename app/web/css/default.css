@@ -503,3 +503,7 @@ input:focus:-ms-input-placeholder {
 .container-fluid.quote-results {
     padding: 15px;
 }
+
+.paragraph-text div {
+    padding-bottom: 10px;
+}
