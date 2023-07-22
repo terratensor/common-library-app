@@ -9,6 +9,7 @@ return [
     'githubRepositoryUrl' => getenv('GH_REPO_URL'),
     'urlShortenerHost' => getenv('URL_SHORTENER_HOST'), // Хост в сети интернет, в локальной сети docker - это наименования сервиса
     'urlShortenerUrl' => getenv('URL_SHORTENER_URL'), // Хост в сети интернет, в локальной сети docker - это наименования сервиса
+    'shortLinkEnable' => getenv('SHORT_LINK_ENABLE'),
     'manticore' => [
         'host' => 'lib-manticore',
         'port' => 9308,
