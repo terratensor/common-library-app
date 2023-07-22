@@ -58,7 +58,7 @@ class ParagraphRepository
         $query = new BoolQuery();
 
         if ($form->query) {
-            $query->must(new QueryString($queryString));
+            $query->must(new QueryString("@text " . $queryString));
         }
 
         // Выполняем поиск если установлен фильтр или установлен строка поиска
@@ -104,7 +104,7 @@ class ParagraphRepository
         $query = new BoolQuery();
 
         if ($form->query) {
-            $query->must(new MatchQuery($queryString, '*'));
+            $query->must(new MatchQuery($queryString, 'text'));
         }
 
         // Выполняем поиск если установлен фильтр или установлен строка поиска
@@ -148,7 +148,7 @@ class ParagraphRepository
         $query = new BoolQuery();
 
         if ($form->query) {
-            $query->must(new MatchPhrase($queryString, '*'));
+            $query->must(new MatchPhrase($queryString, 'text'));
         }
 
 
