@@ -110,3 +110,4 @@ networks:
   traefik-public:
     external: true
   common-library-net:
+    name: common-library-net
