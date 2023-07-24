@@ -18,7 +18,7 @@ use yii\bootstrap5\LinkPager;
 use yii\data\Pagination;
 
 $this->title = Yii::$app->name;
-$this->params['breadcrumbs'][] = 'Поиск по книгам';
+$this->params['breadcrumbs'][] = Yii::$app->name;
 
 
 /** Quote form block  */
