@@ -25,6 +25,7 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_k
     <title><?= Html::encode($this->title) ?></title>
     <script src="/js/color-mode-toggler.js"></script>
     <?php $this->head() ?>
+    <?= $this->render('yandex_metrika'); ?>
 </head>
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
