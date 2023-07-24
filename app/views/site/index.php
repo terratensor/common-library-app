@@ -20,6 +20,14 @@ use yii\data\Pagination;
 $this->title = Yii::$app->name;
 $this->params['breadcrumbs'][] = Yii::$app->name;
 
+$this->params['meta_description'] = 'Цитаты из 11 тысяч томов преимущественно русскоязычных авторов, в которых широко раскрыты большинство исторических событий — это документальная, научная, историческая литература, а также воспоминания, мемуары, дневники и письма, издававшиеся в форме собраний сочинений и художественной литературы';
+
+if ($results) {
+    $this->registerMetaTag(['name' => 'robots', 'content' => 'noindex, nofollow']);
+} else {
+    $this->registerLinkTag(['rel' => 'canonical', 'href' => Yii::$app->params['frontendHostInfo']]);
+    $this->registerMetaTag(['name' => 'robots', 'content' => 'index, nofollow']);
+}
 
 /** Quote form block  */
 
