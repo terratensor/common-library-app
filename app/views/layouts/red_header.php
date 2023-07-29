@@ -7,14 +7,20 @@ $menuItems = [
         'label' => 'Поиск',
         'url' => ['/site/index'],
         'linkOptions' => ['class' => 'nav-link py-2 px-0 px-lg-2'],
-        'options' => ['class' => 'nav-item col-6 col-lg-auto'],
+        'options' => ['class' => 'nav-item col-12 col-lg-auto'],
     ],
-//    [
-//        'label' => 'ФКТ',
-//        'url' => 'https://svodd.ru',
-//        'linkOptions' => ['class' => 'nav-link py-2 px-0 px-lg-2'],
-//        'options' => ['class' => 'nav-item col-6 col-lg-auto'],
-//    ],
+    [
+        'label' => 'Поиск по ФКТ',
+        'url' => 'https://svodd.ru',
+        'linkOptions' => ['class' => 'nav-link py-2 px-0 px-lg-2'],
+        'options' => ['class' => 'nav-item col-12 col-lg-auto'],
+    ],
+    [
+        'label' => 'Поиск по толстым книгам',
+        'url' => 'https://kob.svodd.ru',
+        'linkOptions' => ['class' => 'nav-link py-2 px-0 px-lg-2'],
+        'options' => ['class' => 'nav-item col-12 col-lg-auto'],
+    ],
 //    [
 //        'label' => 'Статистика',
 //        'url' => 'https://svodd.ru/graph',
