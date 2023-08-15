@@ -38,7 +38,7 @@ class ShortLinkModal extends Widget
                     'id' => 'shortLinkModal',
                     'toggleButton' => [
                         'class' => 'btn btn-primary',
-                        'label' => 'Короткая ссылка ★'
+                        'label' => 'Короткая&nbsp;ссылка&nbsp;★'
                     ],
                     'dialogOptions' => [
                         'class' => 'modal-fullscreen-md-down'
