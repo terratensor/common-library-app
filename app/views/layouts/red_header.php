@@ -60,7 +60,7 @@ $menuItems = [
     ],
     [
         'label' => 'Вопросы',
-        'url' => ['https://svodd.ru/questions'],
+        'url' => 'https://svodd.ru/questions',
         'linkOptions' => ['class' => 'nav-link py-2 px-0 px-lg-2'],
         'options' => ['class' => 'nav-item col-12 col-lg-auto'],
     ],
