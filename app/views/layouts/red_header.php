@@ -60,7 +60,7 @@ $menuItems = [
     ],
     [
         'label' => 'Вопросы',
-        'url' => ['/question/index'],
+        'url' => ['https://svodd.ru/questions'],
         'linkOptions' => ['class' => 'nav-link py-2 px-0 px-lg-2'],
         'options' => ['class' => 'nav-item col-12 col-lg-auto'],
     ],
@@ -68,7 +68,7 @@ $menuItems = [
         'label' => ' <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-fill d-none d-lg-inline" viewBox="0 0 16 16">
   <path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2z"/>
 </svg><div class="d-lg-none ms-0">Статистика и хронология обсуждения СВОДД</div>',
-        'url' => ['svodd/index'],
+        'url' => 'https://svodd.ru/graph',
         'linkOptions' => [
             'class' => 'nav-link py-2 px-0 px-lg-2', 'title' => 'Статистика и хронология обсуждения СВОДД'
         ],
