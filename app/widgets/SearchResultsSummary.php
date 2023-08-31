@@ -28,12 +28,12 @@ class SearchResultsSummary extends Widget
         }
 
         $string = \Yii::t(
-            'app',
+            'yii',
             'Показано записей {start} – {end} из {n}',
             [
-                'n' => $totalCount,
-                'start' => $start,
-                'end' => $end
+                'n' => number_format($totalCount, 0, '', ' '),
+                'start' => number_format($start, 0, '', ' '),
+                'end' => number_format($end, 0, '', ' ')
             ]
         );
         return Html::tag('p', $string, ['class' => 'summary']);
