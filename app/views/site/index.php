@@ -140,9 +140,18 @@ $inputTemplate = '<div class="input-group mb-2">
                         <div>
                           <div class="paragraph-text">
                               <?php if (!$paragraph->highlight['text'] || !$paragraph->highlight['text'][0]): ?>
-                                  <?php echo Yii::$app->formatter->asRaw(htmlspecialchars_decode($paragraph->text)); ?>
+                                  <?php Yii::$app->formatter->asRaw(htmlspecialchars($paragraph->text)); ?>
+                                  <?php echo \yii\helpers\HtmlPurifier::process(htmlspecialchars($paragraph->text), function ($config) {
+                                      /** @var $config HTMLPurifier_Config */
+                                      $config->getHTMLDefinition(true)
+                                          ->addElement('mark', 'Block', 'Flow', 'Common');
+                                  }); ?>
                               <?php else: ?>
-                                  <?php echo Yii::$app->formatter->asRaw(htmlspecialchars_decode($paragraph->highlight['text'][0])); ?>
+                                  <?php echo \yii\helpers\HtmlPurifier::process($paragraph->highlight['text'][0], function ($config) {
+                                      /** @var $config HTMLPurifier_Config */
+                                      $config->getHTMLDefinition(true)
+                                          ->addElement('mark', 'Block', 'Flow', 'Common');
+                                  }); ?>
                               <?php endif; ?>
                           </div>
                         </div>
@@ -162,7 +171,7 @@ $inputTemplate = '<div class="input-group mb-2">
                     [
                         'pagination' => $pagination,
                         'firstPageLabel' => true,
-                        'lastPageLabel' => true,
+                        'lastPageLabel' => false,
                         'maxButtonCount' => 3,
                         'options' => [
                             'class' => 'd-flex justify-content-center'
