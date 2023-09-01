@@ -12049,3 +12049,17 @@ textarea.form-control-lg {
         padding: 10px 0;
     }
 }
+
+.dropdown-menu.show .nav-link.dropdown-item {
+    margin-top: 2px;
+}
+.dropdown-menu.show .nav-link.dropdown-item  {
+    color: var(--bs-dropdown-link-color);
+}
+
+.dropdown-menu.show .nav-link.dropdown-item.active  {
+    color: var(--bs-dropdown-link-active-color);
+}
+.dropdown-menu.show .nav-link.dropdown-item:active {
+    color: var(--bs-dropdown-link-active-color);
+}
