@@ -28,22 +28,22 @@ class ShortLinkModal extends Widget
         }
         $search = $get['search'];
 
-        if ((key_exists('query', $search) && $search['query'] !== "")) {
+        if (is_array($search) && ((key_exists('query', $search) && $search['query'] !== "") ||
+                (key_exists('date', $search) && $search['date'] !== ""))) {
 
             $this->view->registerJs($this->getJS());
 
             Modal::begin(
                 [
-                    'title' => '<h2>Короткая ссылка</h2>',
+                    'title' => '<div><h2>Короткая ссылка</h2><h5 id="shortLinkResult" class=""></h5></div>',
                     'id' => 'shortLinkModal',
                     'toggleButton' => [
                         'class' => 'btn btn-primary',
-                        'label' => 'Короткая&nbsp;ссылка&nbsp;★'
+                        'label' => 'Короткая ссылка ★'
                     ],
                     'dialogOptions' => [
                         'class' => 'modal-fullscreen-md-down'
                     ],
-                    'footer' => '<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Закрыть</button>',
                 ]);
 
             echo $this->render('short_link_form');
@@ -73,37 +73,69 @@ class ShortLinkModal extends Widget
             var obj = JSON.parse(xhr.response);      
             document.getElementById('inputShortLink1').value = "★ $this->host/"+obj.short
             document.getElementById('inputShortLink2').value = "$this->host/"+obj.short
-            document.getElementById('shortLinkResult').innerHTML = "★&nbsp;$this->host/"+obj.short+"&nbsp;★"
+            document.getElementById('inputShortLink3').value = "★ $this->host/"+obj.short+" ★"
+            document.getElementById('shortLinkResult').innerHTML = "★&nbsp;$this->host/"+obj.short+" ★"
           }
         }
-    })
+    })   
     
-    const copyBtn1 = document.getElementById('buttonInputShortLink1')
-    copyBtn1.addEventListener('click', e => {
-      var text = document.getElementById('inputShortLink1')
-      navigator.clipboard.writeText(text.value)
+    const btns = document.querySelectorAll('#createShortLinkForm button')
+    // Проходим все объекты кнопок по query slector в цикле и вешаем event listener 
+    btns.forEach((btn) => {
+      btn.addEventListener('click', e => {
+        const inp = document.querySelector("[aria-describedby='" + btn.getAttribute('id')+"']")
+        let text = document.getElementById(inp.getAttribute('id'))
+       
+       checkButton(btn)
+       
+        navigator.clipboard.writeText(text.value)
           .then(() => {})
           .catch(err => {
             console.log('Something went wrong', err);
           });
+      hideFunc()
+      })
     })
     
-    const copyBtn2 = document.getElementById('buttonInputShortLink2')
-    copyBtn2.addEventListener('click', e => {
-      var text = document.getElementById('inputShortLink2')
-      navigator.clipboard.writeText(text.value)
-          .then(() => {})
-          .catch(err => {
-            console.log('Something went wrong', err);
-          });
+    // Закрывает модальное окно 
+    function hideFunc() {
+        const truck_modal = document.querySelector('#shortLinkModal');
+        const modal = bootstrap.Modal.getInstance(truck_modal);
+        modal.hide();
+    }
+    
+    // Меняет класс иконки у кнопки на выбранный чекбокс и отменяет ранее выбранную кнопку
+    function checkButton(btn) {
+      btns.forEach((butn) => {
+        if (butn === btn) {
+          butn.children[0].classList.remove('bi-clipboard')
+          butn.children[0].classList.add('bi-clipboard-check')  
+        } else {
+          butn.children[0].classList.remove('bi-clipboard-check')
+          butn.children[0].classList.add('bi-clipboard')  
+        }
+      })        
+    }
+    
+    const inputs = document.querySelectorAll('#createShortLinkForm input')
+    // Проходим все объекты input полей по query slector в цикле и вешаем event listener 
+    inputs.forEach((input) => {
+        input.addEventListener("focus", function() {
+        this.select();
+      });
     })
     
-    document.getElementById("inputShortLink1").addEventListener("focus", function() {
-      this.select();
-    });
-    document.getElementById("inputShortLink2").addEventListener("focus", function() {
-      this.select();
-    });
+    // Действие по ctrl+c — копирование текста, закрытие окна, смена иконки кнопки
+    document.addEventListener('keydown', function(event) {
+      if (event.ctrlKey && event.code === 'KeyC') {
+        const el = event.target.attributes
+        const elID = el.getNamedItem('aria-describedby').value
+        const btn = document.getElementById(elID)
+        checkButton(btn)
+        hideFunc()
+      }
+});
+
 JS;
 
     }

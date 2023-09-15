@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d5f514184737e2d2f76233dcf3a0e19",
+    "content-hash": "a1cbccdd1f37086dd6d710d2b0a9e33c",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -431,6 +431,18 @@
                 "source": "https://github.com/manticoresoftware/manticoresearch-php/"
             },
             "time": "2023-05-24T06:52:59+00:00"
+        },
+        {
+            "name": "npm-asset/bootstrap-icons",
+            "version": "1.10.5",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/bootstrap-icons/-/bootstrap-icons-1.10.5.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
         },
         {
             "name": "paragonie/random_compat",
