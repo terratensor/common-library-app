@@ -16,16 +16,16 @@ app-permissions:
 	docker run --rm -v ${PWD}/app:/app -w /app alpine chmod 777 runtime web/assets
 
 app-composer-install:
-	docker-compose run --rm php composer install
+	docker compose run --rm php composer install
 
 docker-pull:
 	docker compose pull
 
 docker-build:
-	DOCKER_BUILDKIT=1 COMPOSE_DOCKER_CLI_BUILD=1 docker-compose build --build-arg BUILDKIT_INLINE_CACHE=1 --pull
+	DOCKER_BUILDKIT=1 COMPOSE_DOCKER_CLI_BUILD=1 docker compose build --build-arg BUILDKIT_INLINE_CACHE=1 --pull
 
 push-dev-cache:
-	docker-compose push
+	docker compose push
 
 docker-up:
 	docker compose up -d
@@ -34,7 +34,7 @@ docker-down:
 	docker compose down --remove-orphans
 
 docker-down-clear:
-	docker-compose down -v --remove-orphans
+	docker compose down -v --remove-orphans
 
 try-build:
 	REGISTRY=localhost IMAGE_TAG=0 make build
