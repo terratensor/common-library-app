@@ -152,6 +152,12 @@
     --dr-search-form-bg: #bdbab6;
     --dr-search-form-body: #19191a;
     --dr-search-form-border: #f9f8f6;
+
+      /* Главное меню */
+      --tw-icon-menu-color-rgb: 173 52 52;
+      --tw-icon-menu-color-theme-rgb: 255 255 255;
+  
+      --bs-card-cap-bg: rgba(var(--bs-body-color-rgb), 0.03);
 }
 
 [data-bs-theme=dark] {
@@ -247,6 +253,12 @@
 
     /* Цвет рамки danger card */
     --bs-danger-rgb: 165, 0, 0
+
+     /* Главное меню */
+     --tw-icon-menu-color-rgb: 173 52 52;
+     --tw-icon-menu-color-theme-rgb: 173 52 52;
+ 
+     --bs-card-cap-bg: rgba(var(--bs-body-color-rgb), 0.03);
 }
 
 /* СТИЛИ */

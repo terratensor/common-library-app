@@ -1,4 +1,4 @@
-FROM manticoresearch/manticore
+FROM manticoresearch/manticore:dev
 
 WORKDIR /app
 
