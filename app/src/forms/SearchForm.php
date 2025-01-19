@@ -11,20 +11,23 @@ class SearchForm extends Model
     public string $query = '';
     public string $matching = 'query_string';
 
+    public bool $fuzzy = true;
+
     public function rules(): array
     {
         return [
             ['query', 'string'],
             ['matching', 'in', 'range' => array_keys($this->getMatching())],
+            [['fuzzy'], 'boolean']
         ];
     }
 
     public function getMatching(): array
     {
         return [
-            'query_string' => 'По умолчанию',
-            'match_phrase' => 'По соответствию фразе',
-            'match' => 'По совпадению слов',
+            'query_string' => 'Обычный поиск',
+            'match_phrase' => 'Точное соответствие',
+            'match' => 'Любое слово',
         ];
     }
 

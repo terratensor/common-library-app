@@ -32,8 +32,8 @@ $this->registerMetaTag(['name' => 'description', 'content' => $this->params['met
 
 <main role="main" class="flex-shrink-0 mb-3">
   <div class="container-fluid pb-0">
-    <div class="d-flex justify-content-between align-items-baseline svodd-breadcrumb">
-        <?= Breadcrumbs::widget(
+    <div class="d-flex justify-content-end align-items-baseline svodd-breadcrumb-deprecated">
+        <?php Breadcrumbs::widget(
             [
                 'links' => $this->params['breadcrumbs'] ?? [],
             ]

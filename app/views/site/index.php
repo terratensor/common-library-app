@@ -1,12 +1,5 @@
 <?php
 
-/** @var yii\web\View $this
- * @var ParagraphDataProvider $results
- * @var Pagination $pages
- * @var SearchForm $model
- * @var string $errorQueryMessage
- */
-
 use app\widgets\ScrollWidget;
 use app\widgets\SearchResultsSummary;
 use src\forms\SearchForm;
@@ -17,8 +10,14 @@ use yii\bootstrap5\Html;
 use yii\bootstrap5\LinkPager;
 use yii\data\Pagination;
 
+/** @var yii\web\View $this */
+/** @var ParagraphDataProvider $results */
+/** @var Pagination $pages */
+/** @var SearchForm $model */
+/** @var string $errorQueryMessage */
+
 $this->title = Yii::$app->name;
-$this->params['breadcrumbs'][] = Yii::$app->name;
+// $this->params['breadcrumbs'][] = Yii::$app->name;
 
 $this->params['meta_description'] = 'Цитаты из 11 тысяч томов преимущественно русскоязычных авторов, в которых широко раскрыты большинство исторических событий — это документальная, научная, историческая литература, а также воспоминания, мемуары, дневники и письма, издававшиеся в форме собраний сочинений и художественной литературы';
 
@@ -39,9 +38,10 @@ echo Html::endForm();
 echo Html::beginForm(['/site/search-settings'], 'post', ['name' => 'searchSettingsForm', 'class' => 'd-flex']);
 echo Html::hiddenInput('value', 'toggle');
 echo Html::endForm();
+$searchIcon = '<svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"></path></svg>';
 $inputTemplate = '<div class="input-group mb-2">
           {input}
-          <button class="btn btn-primary" type="submit" id="button-search">Поиск</button>
+          <button class="btn btn-primary" type="submit" id="button-search">' . $searchIcon . '</button>
           <button class="btn btn-outline-secondary ' .
     (Yii::$app->session->get('show_search_settings') ? 'active' : "") . '" id="button-search-settings">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders" viewBox="0 0 16 16">
@@ -79,11 +79,16 @@ $inputTemplate = '<div class="input-group mb-2">
         </div>
         <div id="search-setting-panel"
              class="search-setting-panel <?= Yii::$app->session->get('show_search_settings') ? 'show-search-settings' : '' ?>">
-
+        <div>
             <?= $form->field($model, 'matching', ['inline' => true, 'options' => ['class' => 'pb-2']])
                 ->radioList($model->getMatching(), ['class' => 'form-check-inline'])
                 ->label(false); ?>
-
+                </div>                  
+        <div>
+            <?= $form->field($model, 'fuzzy', ['options' => ['class' => 'pb-2']])
+              ->checkbox()
+              ->label('Нечёткий поиск'); ?>
+         </div>
         </div>
           <?php ActiveForm::end(); ?>
       </div>

@@ -58,7 +58,7 @@ class ParagraphRepository
         $query = new BoolQuery();
 
         if ($form->query) {
-            $query->must(new QueryString("@text " . $queryString));
+            $query->must(new QueryString($queryString));
         }
 
         // Выполняем поиск если установлен фильтр или установлен строка поиска
@@ -70,6 +70,11 @@ class ParagraphRepository
             throw new \DomainException('Задан пустой поисковый запрос');
         }
 
+        // Включаем нечёткий поиск, если строка не пустая или не содержит символы, используемые в полнотекстовом поиске
+        // и не сдержит hash автварки пользователя
+        if ($form->fuzzy && $this->validateQueryString($queryString)) {
+            static::applyFuzzy($search, true);
+        }
         // Если нет совпадений no_match_size возвращает пустое поле для подсветки
         $search->highlight(
             ['text'],
@@ -306,5 +311,33 @@ class ParagraphRepository
         $paragraph = new Paragraph($current->getData());
         $paragraph->setId((int)$current->getId());
         return $paragraph;
+    }
+
+    /**
+     * @param Search $search
+     * @param bool $enable_layouts
+     * @return void
+     */
+    protected static function applyFuzzy(Search $search, bool $enable_layouts = false): void
+    {
+        $search->option('fuzzy', 1);
+        $layouts = [];
+        if ($enable_layouts) {
+            $layouts = ['ru', 'us'];
+        }
+        $search->option('layouts', $layouts);
+        $search->option('distance', 2);
+    }
+
+    
+    private function validateQueryString($queryString): bool
+    {
+        // Если строка пустая или содержит символы, используемые в полнотекстовом поиске, то возвращаем false
+        if (empty($queryString) || SearchHelper::containsSpecialChars($queryString)) {
+            return false;
+        }
+
+        // В противном случае возвращаем true
+        return true;
     }
 }

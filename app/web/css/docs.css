@@ -2862,9 +2862,9 @@ textarea.form-control-lg {
     border-color: var(--bs-form-valid-border-color)
 }
 
-.was-validated .form-check-input:valid:checked,.form-check-input.is-valid:checked {
+/* .was-validated .form-check-input:valid:checked,.form-check-input.is-valid:checked {
     background-color: var(--bs-form-valid-color)
-}
+} */
 
 .was-validated .form-check-input:valid:focus,.form-check-input.is-valid:focus {
     box-shadow: 0 0 0 .25rem rgba(var(--bs-success-rgb), 0.25)
