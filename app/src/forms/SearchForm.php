@@ -11,7 +11,7 @@ class SearchForm extends Model
     public string $query = '';
     public string $matching = 'query_string';
 
-    public bool $fuzzy = true;
+    public bool $fuzzy = false;
 
     public function rules(): array
     {

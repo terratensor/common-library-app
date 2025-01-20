@@ -73,6 +73,7 @@ class ParagraphRepository
         // Включаем нечёткий поиск, если строка не пустая или не содержит символы, используемые в полнотекстовом поиске
         // и не сдержит hash автварки пользователя
         if ($form->fuzzy && $this->validateQueryString($queryString)) {
+            \Yii::$app->session->setFlash('success', "Включена опция «Нечёткий поиск». Для выключения уберите флажок в настройках поиска.");
             static::applyFuzzy($search, true);
         }
         // Если нет совпадений no_match_size возвращает пустое поле для подсветки
