@@ -146,7 +146,7 @@ $inputTemplate = '<div class="input-group mb-2">
                           <div class="paragraph-text">
                               <?php if (!$paragraph->highlight['text'] || !$paragraph->highlight['text'][0]): ?>
                                   <?php Yii::$app->formatter->asRaw(htmlspecialchars($paragraph->text)); ?>
-                                  <?php echo \yii\helpers\HtmlPurifier::process(htmlspecialchars($paragraph->text), function ($config) {
+                                  <?php echo \yii\helpers\HtmlPurifier::process($paragraph->text, function ($config) {
                                       /** @var $config HTMLPurifier_Config */
                                       $config->getHTMLDefinition(true)
                                           ->addElement('mark', 'Block', 'Flow', 'Common');
