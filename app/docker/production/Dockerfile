@@ -1,4 +1,4 @@
-FROM php:8.1-cli-alpine AS builder
+FROM php:8.3-cli-alpine AS builder
 
 RUN apk add --no-cache unzip
 
@@ -14,7 +14,7 @@ RUN composer install --no-dev --prefer-dist --no-progress --no-suggest --optimiz
     && rm -rf /root/.composer/cache
 
 
-FROM yiisoftware/yii2-php:8.1-apache
+FROM yiisoftware/yii2-php:8.3-apache
 
 WORKDIR /app
 

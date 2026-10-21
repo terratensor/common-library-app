@@ -1,7 +1,7 @@
 version: '2'
 services:
   php:
-    image: yiisoftware/yii2-php:8.1-apache
+    image: yiisoftware/yii2-php:8.3-apache
     environment:
       APP_ENV: dev
       FRONTEND_URL: 'http://localhost:8000'
